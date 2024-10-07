@@ -7,9 +7,16 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     msg: err.message || 'Something went wrong try again later',
   };
   if (err.name === 'ValidationError') {
-    customError.msg = Object.values(err.errors)
+    const array = Object.values(err.errors);
+    // console.log(Object.keys(err.errors));
+    const allButLast = array
+      .slice(0, -1)
       .map((item) => item.message)
-      .join(',');
+      .join(', ');
+    const last = array[array.length - 1].message;
+    // console.log(last);
+    customError.msg =
+      'Fields ' + allButLast + ' and ' + last + ' are required to proceed.';
     customError.statusCode = 400;
   }
   if (err.code && err.code === 11000) {
