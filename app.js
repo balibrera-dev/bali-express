@@ -12,6 +12,7 @@ const rateLimiter = require('express-rate-limit');
 const helmet = require('helmet');
 const xss = require('xss-clean');
 const cors = require('cors');
+const allowCrossDomain = require('./middleware/cors');
 
 // database
 const mongoSanitize = require('express-mongo-sanitize');
@@ -58,6 +59,8 @@ app.use('/api/v1/stops', stopRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
+
+app.use(allowCrossDomain);
 
 const port = process.env.PORT || 5000;
 const start = async () => {
